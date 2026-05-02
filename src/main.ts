@@ -23,7 +23,8 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapterHost));
 
-  await app.listen(Number(process.env.PORT ?? 3007));
-  console.log(`MS Inventario corriendo en puerto ${process.env.PORT ?? 3007}`);
+  //await app.listen(Number(process.env.PORT ?? 3007));
+  await app.listen(process.env.PORT || 3000, '0.0.0.0');
+  console.log(`MS Inventario corriendo en puerto ${process.env.PORT ?? 3000}`);
 }
 void bootstrap();

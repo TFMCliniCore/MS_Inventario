@@ -15,6 +15,6 @@ COPY src ./src
 
 RUN npm run build
 
-EXPOSE 3007
+EXPOSE 3000
 
 CMD ["sh", "-c", "npx prisma migrate deploy && npm run prisma:seed && node dist/main.js"]
