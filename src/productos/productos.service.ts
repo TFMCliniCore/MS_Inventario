@@ -23,6 +23,7 @@ interface FilaImportacion {
   cantidadMinima?: unknown;
   cantidadMaxima?: unknown;
   fechaVencimiento?: unknown;
+  imagen?: unknown;
 }
 
 @Injectable()
@@ -129,6 +130,17 @@ export class ProductosService {
     });
   }
 
+  async uploadImagen(id: number, filename: string) {
+    await this.getOrFail(id);
+    // Guarda la ruta relativa; el gateway la expone en /api/v1/uploads/productos/:filename
+    const imagenPath = `/api/v1/uploads/productos/${filename}`;
+    return this.prisma.producto.update({
+      where: { id },
+      data: { imagen: imagenPath },
+      include: { categoria: true },
+    });
+  }
+
   // ── Búsqueda de texto libre ────────────────────────────────────────────
 
   buscar(q: string) {
@@ -183,45 +195,39 @@ export class ProductosService {
       });
     }
 
-    const creados = await this.prisma.$transaction(
-      validas.map((fila) =>
-        this.prisma.producto.create({
-          data: {
-            nombre: String(fila.nombre),
-            descripcion: fila.descripcion ? String(fila.descripcion) : undefined,
-            codigoBarras: fila.codigoBarras
-              ? String(fila.codigoBarras)
-              : undefined,
-            codigoInterno: fila.codigoInterno
-              ? String(fila.codigoInterno)
-              : undefined,
-            marca: fila.marca ? String(fila.marca) : undefined,
-            fabricante: fila.fabricante ? String(fila.fabricante) : undefined,
-            precioCompra: fila.precioCompra
-              ? parseFloat(String(fila.precioCompra))
-              : undefined,
-            precioVenta: parseFloat(String(fila.precioVenta)),
-            cantidadActual: fila.cantidadActual
-              ? parseInt(String(fila.cantidadActual))
-              : 0,
-            cantidadMinima: fila.cantidadMinima
-              ? parseInt(String(fila.cantidadMinima))
-              : 0,
-            cantidadMaxima: fila.cantidadMaxima
-              ? parseInt(String(fila.cantidadMaxima))
-              : undefined,
-            fechaVencimiento: fila.fechaVencimiento
-              ? new Date(String(fila.fechaVencimiento))
-              : undefined,
-          },
-        }),
-      ),
-    );
+    const result = await this.prisma.producto.createMany({
+      data: validas.map((fila) => ({
+        nombre: String(fila.nombre),
+        descripcion: fila.descripcion ? String(fila.descripcion) : undefined,
+        codigoBarras: fila.codigoBarras ? String(fila.codigoBarras) : undefined,
+        codigoInterno: fila.codigoInterno ? String(fila.codigoInterno) : undefined,
+        marca: fila.marca ? String(fila.marca) : undefined,
+        fabricante: fila.fabricante ? String(fila.fabricante) : undefined,
+        precioCompra: fila.precioCompra
+          ? parseFloat(String(fila.precioCompra))
+          : undefined,
+        precioVenta: parseFloat(String(fila.precioVenta)),
+        cantidadActual: fila.cantidadActual
+          ? parseInt(String(fila.cantidadActual))
+          : 0,
+        cantidadMinima: fila.cantidadMinima
+          ? parseInt(String(fila.cantidadMinima))
+          : 0,
+        cantidadMaxima: fila.cantidadMaxima
+          ? parseInt(String(fila.cantidadMaxima))
+          : undefined,
+        fechaVencimiento: fila.fechaVencimiento
+          ? new Date(String(fila.fechaVencimiento))
+          : undefined,
+        imagen: fila.imagen ? String(fila.imagen) : undefined,
+      })),
+      skipDuplicates: true,
+    });
 
     return {
       message: 'Importación completada.',
-      importados: creados.length,
-      omitidos: errores.length,
+      importados: result.count,
+      omitidos: validas.length - result.count + errores.length,
       errores,
     };
   }
@@ -229,7 +235,8 @@ export class ProductosService {
   // ── Helpers privados ───────────────────────────────────────────────────
 
   private parsearArchivo(buffer: Buffer): FilaImportacion[] {
-    const workbook = XLSX.read(buffer, { type: 'buffer', cellDates: true });
+    // type:'string' con toString('utf8') evita que SheetJS interprete el CSV como CP1252
+    const workbook = XLSX.read(buffer.toString('utf8'), { type: 'string', cellDates: true });
     const hoja = workbook.Sheets[workbook.SheetNames[0]];
     return XLSX.utils.sheet_to_json<FilaImportacion>(hoja, { defval: null });
   }

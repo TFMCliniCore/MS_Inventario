@@ -1,0 +1,547 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "MS Inventario",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Coleccion Postman para probar el microservicio MS Inventario (puerto 3007). Cubre categorias, productos, movimientos de stock e importacion masiva."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3007/api/v1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Categorias",
+      "item": [
+        {
+          "name": "Listar categorias",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": ["{{baseUrl}}"],
+              "path": ["categorias"]
+            }
+          }
+        },
+        {
+          "name": "Obtener categoria por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["categorias", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear categoria",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Medicamentos\",\n  \"descripcion\": \"Farmacos y medicamentos veterinarios\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": ["{{baseUrl}}"],
+              "path": ["categorias"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar categoria (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Antibioticos, analgesicos y antipireticos veterinarios\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categorias/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["categorias", "1"]
+            }
+          }
+        },
+        {
+          "name": "Reemplazar categoria (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Medicamentos\",\n  \"descripcion\": \"Farmacos y medicamentos veterinarios\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categorias/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["categorias", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar categoria (borrado logico)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["categorias", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Productos",
+      "item": [
+        {
+          "name": "Listar productos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productos",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos"]
+            }
+          }
+        },
+        {
+          "name": "Listar productos - filtro por categoria",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productos?categoriaId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos"],
+              "query": [
+                { "key": "categoriaId", "value": "1" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar productos - filtro stock bajo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productos?stockBajo=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos"],
+              "query": [
+                { "key": "stockBajo", "value": "true" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar productos - filtro por marca",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productos?marca=Bayer",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos"],
+              "query": [
+                { "key": "marca", "value": "Bayer" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar productos - filtro por codigo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productos?codigo=MED-001",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos"],
+              "query": [
+                { "key": "codigo", "value": "MED-001" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar productos - multiples filtros",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productos?categoriaId=1&stockBajo=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos"],
+              "query": [
+                { "key": "categoriaId", "value": "1" },
+                { "key": "stockBajo", "value": "true" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar productos por texto libre",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productos/buscar?q=amoxicilina",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos", "buscar"],
+              "query": [
+                { "key": "q", "value": "amoxicilina" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener producto por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Amoxicilina 500mg\",\n  \"descripcion\": \"Antibiotico de amplio espectro para uso veterinario\",\n  \"codigoInterno\": \"MED-001\",\n  \"codigoBarras\": \"7702011234567\",\n  \"marca\": \"Vetoquinol\",\n  \"fabricante\": \"Vetoquinol SA\",\n  \"precioCompra\": \"8500\",\n  \"precioVenta\": \"15000\",\n  \"cantidadActual\": 50,\n  \"cantidadMinima\": 10,\n  \"cantidadMaxima\": 200,\n  \"fechaVencimiento\": \"2026-12-31\",\n  \"imagen\": \"https://example.com/productos/amoxicilina.jpg\",\n  \"categoriaId\": 1,\n  \"sucursalId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/productos",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos"]
+            }
+          }
+        },
+        {
+          "name": "Crear producto (minimo requerido)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Producto sin codigo\",\n  \"precioVenta\": \"5000\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/productos",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar producto (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"precioVenta\": \"16500\",\n  \"cantidadMinima\": 15\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/productos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Reemplazar producto (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Amoxicilina 500mg\",\n  \"precioVenta\": \"16500\",\n  \"cantidadActual\": 50,\n  \"cantidadMinima\": 15\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/productos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar producto (borrado logico)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Imagenes de Productos",
+      "item": [
+        {
+          "name": "Subir imagen de producto",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "imagen",
+                  "type": "file",
+                  "src": "",
+                  "description": "Archivo de imagen: jpeg, png, webp o gif. Maximo 5 MB."
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/productos/1/imagen",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos", "1", "imagen"]
+            }
+          }
+        },
+        {
+          "name": "Obtener imagen de producto",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/uploads/productos/nombre-archivo.jpg",
+              "host": ["{{baseUrl}}"],
+              "path": ["uploads", "productos", "nombre-archivo.jpg"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Importacion Masiva",
+      "item": [
+        {
+          "name": "Preview de importacion (sin guardar)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "",
+                  "description": "Archivo .xlsx, .xls o .csv con columnas: nombre (requerido), precioVenta (requerido) y campos opcionales."
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/productos/importar/preview",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos", "importar", "preview"]
+            }
+          }
+        },
+        {
+          "name": "Importar productos definitivamente",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "",
+                  "description": "Archivo .xlsx, .xls o .csv. Los duplicados (mismo codigoBarras o codigoInterno) se omiten sin error."
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/productos/importar",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos", "importar"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Movimientos de Stock",
+      "item": [
+        {
+          "name": "Listar movimientos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos-stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos-stock"]
+            }
+          }
+        },
+        {
+          "name": "Listar movimientos - filtro por producto",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos-stock?productoId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos-stock"],
+              "query": [
+                { "key": "productoId", "value": "1" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar movimientos - filtro por tipo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos-stock?tipo=ENTRADA",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos-stock"],
+              "query": [
+                { "key": "tipo", "value": "ENTRADA" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar movimientos - filtro por sucursal y usuario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos-stock?sucursalId=1&usuarioId=2",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos-stock"],
+              "query": [
+                { "key": "sucursalId", "value": "1" },
+                { "key": "usuarioId", "value": "2" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Movimientos de un producto especifico",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos-stock/producto/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos-stock", "producto", "1"]
+            }
+          }
+        },
+        {
+          "name": "Obtener movimiento por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos-stock/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos-stock", "1"]
+            }
+          }
+        },
+        {
+          "name": "Registrar ENTRADA de stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productoId\": 1,\n  \"tipo\": \"ENTRADA\",\n  \"cantidad\": 20,\n  \"motivo\": \"Compra a proveedor\",\n  \"usuarioId\": 1,\n  \"sucursalId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/movimientos-stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos-stock"]
+            }
+          }
+        },
+        {
+          "name": "Registrar SALIDA de stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productoId\": 1,\n  \"tipo\": \"SALIDA\",\n  \"cantidad\": 3,\n  \"motivo\": \"Venta en mostrador\",\n  \"usuarioId\": 2,\n  \"sucursalId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/movimientos-stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos-stock"]
+            }
+          }
+        },
+        {
+          "name": "Registrar AJUSTE de stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productoId\": 1,\n  \"tipo\": \"AJUSTE\",\n  \"cantidad\": 45,\n  \"motivo\": \"Ajuste por conteo fisico\",\n  \"usuarioId\": 1,\n  \"sucursalId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/movimientos-stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos-stock"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
