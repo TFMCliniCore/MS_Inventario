@@ -4,6 +4,7 @@ import { EntidadesClientModule } from './entidades-client/entidades-client.modul
 import { CategoriasModule } from './categorias/categorias.module';
 import { ProductosModule } from './productos/productos.module';
 import { MovimientosStockModule } from './movimientos-stock/movimientos-stock.module';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { MovimientosStockModule } from './movimientos-stock/movimientos-stock.mo
     CategoriasModule,
     ProductosModule,
     MovimientosStockModule,
+    UploadsModule,
   ],
 })
 export class AppModule {}

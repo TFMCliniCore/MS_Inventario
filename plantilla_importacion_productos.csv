@@ -1,0 +1,11 @@
+nombre,descripcion,codigoBarras,codigoInterno,marca,fabricante,precioCompra,precioVenta,cantidadActual,cantidadMinima,cantidadMaxima,fechaVencimiento,imagen
+Paracetamol 500mg,Analgésico y antipirético de uso general,7501234567890,MED-001,Bayer,Bayer AG,8.50,15.00,100,20,500,2027-06-30,https://placehold.co/300x300/e8f4f8/1a73e8?text=Paracetamol
+Amoxicilina 250mg Suspensión,Antibiótico de amplio espectro sabor fresa,7509876543210,MED-002,Pfizer,Pfizer Inc.,22.00,38.50,60,10,200,2026-12-15,https://placehold.co/300x300/e8f8e8/2e7d32?text=Amoxicilina
+Ibuprofeno 400mg,Antiinflamatorio y analgésico,7501111222333,MED-003,Genérico,Laboratorios Chile,5.00,10.00,200,30,600,2028-03-01,https://placehold.co/300x300/fff8e1/f57f17?text=Ibuprofeno
+Alcohol Etílico 70% 1L,Antiséptico para uso externo,,INS-001,Rexal,,18.00,28.00,50,10,,,https://placehold.co/300x300/f3e5f5/6a1b9a?text=Alcohol
+Jeringas 5ml (caja x100),Jeringas desechables estériles,7508888999000,SUM-001,BD,Becton Dickinson,35.00,55.00,30,5,100,,https://placehold.co/300x300/e3f2fd/0277bd?text=Jeringas
+Guantes de Látex Talla M (caja x100),Guantes desechables sin polvo,,SUM-002,Neoflexo,,40.00,65.00,20,5,,,https://placehold.co/300x300/fce4ec/c62828?text=Guantes
+Omeprazol 20mg,Inhibidor de bomba de protones,7502222333444,MED-004,MK,Merck,12.00,22.00,80,15,300,2027-09-10,https://placehold.co/300x300/e8f5e9/1b5e20?text=Omeprazol
+Solución Salina 0.9% 1000ml,Cloruro de sodio isotónico para infusión,7503333444555,MED-005,Baxter,Baxter International,9.00,16.00,40,10,150,2027-01-20,https://placehold.co/300x300/e1f5fe/01579b?text=Solucion+Salina
+Vitamina C 1000mg Efervescente,Suplemento vitamínico 20 tabletas,,SUP-001,Redoxon,Bayer,15.00,27.50,120,25,,2026-08-31,https://placehold.co/300x300/fffde7/f9a825?text=Vitamina+C
+Termómetro Digital,,7504444555666,EQU-001,Microlife,Microlife AG,25.00,45.00,15,3,50,,https://placehold.co/300x300/efebe9/4e342e?text=Termometro
