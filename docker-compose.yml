@@ -47,4 +47,5 @@ volumes:
 
 networks:
   ms-inventario-net:
-    driver: bridge
+    external: true
+    name: ms_inventario_ms-inventario-net

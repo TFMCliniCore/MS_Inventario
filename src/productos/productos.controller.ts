@@ -13,6 +13,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger'; // 👈 Importaciones añadidas
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage, memoryStorage } from 'multer';
 import { extname, join } from 'path';
@@ -31,6 +32,7 @@ const MIMETYPES_PERMITIDOS = [
   'application/csv',
 ];
 
+@ApiTags('Productos') // 👈 Agrupador para la UI de Swagger
 @Controller('productos')
 export class ProductosController {
   constructor(private readonly productosService: ProductosService) {}
@@ -38,16 +40,19 @@ export class ProductosController {
   // ── CRUD ──────────────────────────────────────────────────────────────
 
   @Post()
+  @ApiOperation({ summary: 'Crear un nuevo producto en el catálogo e inicializar sus propiedades' })
   create(@Body() dto: CreateProductoDto) {
     return this.productosService.create(dto);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Listar y filtrar productos con soporte para paginación y stock bajo' })
   findAll(@Query() filters: FiltrosProductoDto) {
     return this.productosService.findAll(filters);
   }
 
   @Get('buscar')
+  @ApiOperation({ summary: 'Buscar productos por coincidencia rápida en nombre, código o SKU (parámetro q)' })
   buscar(@Query('q') q: string) {
     if (!q?.trim())
       throw new BadRequestException('El parámetro "q" es requerido.');
@@ -55,11 +60,13 @@ export class ProductosController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Obtener la ficha técnica e información detallada de un producto' })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.productosService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Modificar parcialmente los atributos o precios de un producto' })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateProductoDto,
@@ -68,6 +75,7 @@ export class ProductosController {
   }
 
   @Put(':id')
+  @ApiOperation({ summary: 'Reemplazar por completo los datos de registro de un producto' })
   replace(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateProductoDto,
@@ -76,6 +84,7 @@ export class ProductosController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Retirar o eliminar físicamente un producto del inventario' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.productosService.remove(id);
   }
@@ -83,6 +92,14 @@ export class ProductosController {
   // ── Subida de imagen ──────────────────────────────────────────────────
 
   @Post(':id/imagen')
+  @ApiOperation({ summary: 'Subir o actualizar la imagen de portada de un producto' })
+  @ApiConsumes('multipart/form-data') // 👈 Habilita la carga de archivos en Swagger
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { imagen: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(
     FileInterceptor('imagen', {
       storage: diskStorage({
@@ -117,6 +134,14 @@ export class ProductosController {
   // ── Importación masiva ────────────────────────────────────────────────
 
   @Post('importar/preview')
+  @ApiOperation({ summary: 'Previsualizar la estructura y validaciones de un archivo de importación masiva sin guardarlo' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(
     FileInterceptor('file', { storage: memoryStorage() }),
   )
@@ -126,6 +151,14 @@ export class ProductosController {
   }
 
   @Post('importar')
+  @ApiOperation({ summary: 'Procesar y guardar de forma masiva un lote de productos desde un archivo (.xlsx, .xls, .csv)' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(
     FileInterceptor('file', { storage: memoryStorage() }),
   )

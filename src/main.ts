@@ -3,6 +3,7 @@ import { loadEnvFile } from 'node:process';
 import { join } from 'node:path';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'; // 👈 1. ¡IMPORTANTE IMPORTAR ESTO!
 import { AppModule } from './app.module';
 import { PrismaClientExceptionFilter } from './prisma/prisma-client-exception.filter';
 
@@ -27,7 +28,22 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapterHost));
 
-  //await app.listen(Number(process.env.PORT ?? 3007));
+  // 👈 2. CREAR LA CONFIGURACIÓN BASE QUE LE FALTABA A TU ARCHIVO:
+  const config = new DocumentBuilder()
+    .setTitle('CliniCore - MS Inventario y Stock')
+    .setDescription('Endpoints exclusivos del módulo de Inventario, Categorías y Stock')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+
+  // 🎯 Exponer la documentación y el JSON crudo
+  SwaggerModule.setup('api/v1/productos/docs', app, document, {
+    swaggerOptions: {
+      jsonEditor: true, 
+    }
+  });
+
   await app.listen(process.env.PORT || 3007, '0.0.0.0');
   console.log(`MS Inventario corriendo en puerto ${process.env.PORT ?? 3007}`);
 }
