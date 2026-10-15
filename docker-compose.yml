@@ -19,7 +19,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - ms-inventario-net
+      - clinicore-net
 
   api:
     build:
@@ -40,12 +40,11 @@ services:
     volumes:
       - ./uploads:/app/uploads
     networks:
-      - ms-inventario-net
+      - clinicore-net
 
 volumes:
   postgres_data:
 
 networks:
-  ms-inventario-net:
+  clinicore-net:
     external: true
-    name: ms_inventario_ms-inventario-net
